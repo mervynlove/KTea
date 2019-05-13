@@ -14,22 +14,49 @@ object Token {
         Settings.appCtx().getSharedPreferences(NAME, Context.MODE_PRIVATE)
     }
 
+    /**
+     * 清空token
+     */
+    fun clearToken() {
+        val key = SP.getString(tokenKey, "")
+        if (key.isNotEmpty()) {
+            val value = SP.getString(tokenValue, "")
+            if (value.isNotEmpty()) {
+                HttpHead.params.remove(key)
+                SP.edit().apply {
+                    remove(tokenKey)
+                    remove(tokenValue)
+                    apply()
+                    commit()
+                }
+            }
+        }
+    }
 
     /**
      * 获取和设置token
+     * pair.first : token的key String
+     * pair.second : token的value String
      */
-    var token: Pair<String, String>
-        get() = Pair(
-                SP.getString(tokenKey, ""),
-                SP.getString(tokenValue, "")
-        )
+    var token: Pair<String, String>?
+        get() {
+            val key = SP.getString(tokenKey, "")
+            val value = SP.getString(tokenValue, "")
+            if (key.isNotEmpty() && value.isNotEmpty()) {
+                HttpHead.params[key] = value
+                return Pair(key, value)
+            }
+            return null
+        }
         set(value) {
-            HttpHead.params[value.first] = value.second
-            SP.edit().apply {
-                putString(tokenKey, value.first)
-                putString(tokenValue, value.second)
-                apply()
-                commit()
+            if (value != null) {
+                HttpHead.params[value.first] = value.second
+                SP.edit().apply {
+                    putString(tokenKey, value.first)
+                    putString(tokenValue, value.second)
+                    apply()
+                    commit()
+                }
             }
         }
 }

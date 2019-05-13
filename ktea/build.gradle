@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'com.novoda.bintray-release'
 
 
 android {
@@ -19,6 +20,10 @@ android {
         }
     }
 
+    lintOptions {
+        abortOnError false
+    }
+
 }
 
 repositories {
@@ -26,6 +31,15 @@ repositories {
     jcenter()
     google()
     maven { url 'https://jitpack.io' }
+}
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.novoda:bintray-release:0.9.1'
+    }
 }
 
 dependencies {
@@ -48,4 +62,14 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     implementation 'com.alibaba:fastjson:1.1.71.android'
     implementation 'com.orhanobut:logger:2.2.0'
+}
+
+publish {
+    userOrg = 'mervynlove'
+    groupId = 'com.mengwei'
+    artifactId = 'ktea'
+    publishVersion = '1.0'
+    desc = '基于Kotlin和Jetpack的Android开发框架'
+    website = 'https://github.com/mervynlove/KTea'
+
 }
