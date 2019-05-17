@@ -1,12 +1,19 @@
 # KTea
-一个kotlin代码开发的Android应用框架, 它可以简化开发中的复杂任务, 摆脱重复的样板代码, 以便把精力集中到实现业务逻辑. 你只需要花很少的时间就可以精通它, 编写更简洁且灵活的应用.并且它的性能十分出色 : 更少的资源占用, 减少崩溃和内存泄露.
+Ktea是kotlin开发的Android库, 它可以让Android开发更简单更快速更容易维护. 它很容易入门和使用, 方便架构高质量的应用, 减少崩溃和内存泄露.
 ##### [KTea最佳实践教程(正在整理中, 将陆续开放)](https://github.com/mervynlove/KTea)
 
-## 开始使用
-- 在Gradle引用
-
+## 在Gradle引入Ktea
+- 在项目module下的build.gradle中添加
 ```
-implementation 'com.mengwei:ktea:1.1.0'
+repositories {
+    maven { url 'https://jitpack.io' }
+}
+
+dependencies {
+    //... 其他库的引用
+    implementation 'com.mengwei:ktea:1.1.0'
+}
+
 ```
 - 在项目的Application的类中初始化KTea参数
 
