@@ -26,13 +26,6 @@ android {
 
 }
 
-repositories {
-    mavenCentral()
-    jcenter()
-    google()
-    maven { url 'https://jitpack.io' }
-}
-
 buildscript {
     repositories {
         jcenter()
@@ -58,7 +51,6 @@ dependencies {
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.github.ybq:Android-SpinKit:1.2.0'
-    implementation 'com.github.Shashank02051997:FancyToast-Android:0.1.6'
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     implementation 'com.alibaba:fastjson:1.1.71.android'
     implementation 'com.orhanobut:logger:2.2.0'

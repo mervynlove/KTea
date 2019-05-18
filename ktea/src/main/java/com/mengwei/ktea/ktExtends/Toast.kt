@@ -1,7 +1,7 @@
 import android.content.Context
 import android.view.Gravity
 import android.widget.Toast
-import com.shashank.sony.fancytoastlib.FancyToast
+import com.mengwei.ktea.views.FancyToast
 
 /**
  * Create by MengWei at 2018/7/13
@@ -24,7 +24,7 @@ fun Context.toast(text: String, duration: Int = Toast.LENGTH_SHORT) {
 
 fun Context.infoToast(text: String, duration: Int = Toast.LENGTH_SHORT) {
     Toastor.info?.cancel()
-    Toastor.info = FancyToast.makeText(this, text, duration, FancyToast.INFO, false)
+    Toastor.info = FancyToast.makeText(this, text, duration, FancyToast.INFO)
     Toastor.info?.run {
         setGravity(Gravity.CENTER, 0, 200)
         show()
@@ -34,7 +34,7 @@ fun Context.infoToast(text: String, duration: Int = Toast.LENGTH_SHORT) {
 
 fun Context.errorToast(text: String, duration: Int = Toast.LENGTH_LONG) {
     Toastor.error?.cancel()
-    Toastor.error = FancyToast.makeText(this, text, duration, FancyToast.ERROR, false)
+    Toastor.error = FancyToast.makeText(this, text, duration, FancyToast.ERROR)
     Toastor.error?.run {
         setGravity(Gravity.CENTER, 0, 200)
         show()
@@ -43,7 +43,7 @@ fun Context.errorToast(text: String, duration: Int = Toast.LENGTH_LONG) {
 
 fun Context.successToast(text: String, duration: Int = Toast.LENGTH_SHORT) {
     Toastor.success?.cancel()
-    Toastor.success = FancyToast.makeText(this, text, duration, FancyToast.SUCCESS, false)
+    Toastor.success = FancyToast.makeText(this, text, duration, FancyToast.SUCCESS)
     Toastor.success?.run {
         setGravity(Gravity.CENTER, 0, 200)
         show()
@@ -52,7 +52,7 @@ fun Context.successToast(text: String, duration: Int = Toast.LENGTH_SHORT) {
 
 fun Context.warningToast(text: String, duration: Int = Toast.LENGTH_LONG) {
     Toastor.warning?.cancel()
-    Toastor.warning = FancyToast.makeText(this, text, duration, FancyToast.WARNING, false)
+    Toastor.warning = FancyToast.makeText(this, text, duration, FancyToast.WARNING)
     Toastor.warning?.run {
         setGravity(Gravity.CENTER, 0, 200)
         show()
