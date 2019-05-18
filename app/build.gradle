@@ -22,12 +22,6 @@ android {
     }
 }
 
-repositories {
-    mavenCentral()
-    google()
-    maven { url 'https://jitpack.io' }
-}
-
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation project(':ktea')
