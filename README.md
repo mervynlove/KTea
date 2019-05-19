@@ -5,13 +5,9 @@ Ktea是kotlin开发的Android库, 它可以让Android开发更简单更快速更
 ## 引入
 - 在项目module下的build.gradle中添加
 ```
-repositories {
-    maven { url 'https://jitpack.io' }
-}
-
 dependencies {
     //... 其他库的引用
-    implementation 'com.mengwei:ktea:1.1.0'
+    implementation 'com.mengwei:ktea:1.1.1'
 }
 
 ```
