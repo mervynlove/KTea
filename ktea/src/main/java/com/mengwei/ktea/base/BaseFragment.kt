@@ -8,7 +8,7 @@ import com.mengwei.ktea.ktExtends.activity
 /**
  * Create by MengWei at 2018/9/3
  */
-abstract class LoadingFragment : Fragment() {
+abstract class BaseFragment : Fragment() {
 
     fun showLoading() {
         activity<BaseActivity> { showLoading() }

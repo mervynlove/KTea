@@ -69,7 +69,7 @@ publish {
     userOrg = 'mervynlove'
     groupId = 'com.mengwei'
     artifactId = 'ktea'
-    publishVersion = '1.1.0'
+    publishVersion = '1.1.1'
     desc = '简易, 灵活的高性能Kotlin Android开发框架'
     website = 'https://github.com/mervynlove/KTea'
 
