@@ -1,9 +1,10 @@
-# KTea   [ ![Download](https://api.bintray.com/packages/mervynlove/maven/ktea/images/download.svg) ](https://bintray.com/mervynlove/maven/ktea/_latestVersion)
+# KTea
 Ktea是kotlin开发的Android库, 它可以让Android开发更简单更快速更容易维护. 它很容易入门和使用, 方便构建高质量的应用, 减少崩溃和内存泄露.
 ##### [KTea最佳实践教程(正在整理中, 将陆续开放)]()
 
 ## 引入
-- 在项目module下的build.gradle中添加
+latestVersion : [ ![Download](https://api.bintray.com/packages/mervynlove/maven/ktea/images/download.svg) ](https://bintray.com/mervynlove/maven/ktea/_latestVersion)
+- 在项目module下的build.gradle中添加最新版本
 ```
 dependencies {
     //... 其他库的引用
