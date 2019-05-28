@@ -7,7 +7,7 @@ Ktea是kotlin开发的Android库, 它可以让Android开发更简单更快速更
 ```
 dependencies {
     //... 其他库的引用
-    implementation 'com.mengwei:ktea:1.1.1'
+    implementation 'com.mengwei:ktea:x.y.z'
 }
 
 ```
