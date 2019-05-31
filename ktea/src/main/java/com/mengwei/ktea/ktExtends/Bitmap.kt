@@ -1,10 +1,14 @@
-
 @file:Suppress("NOTHING_TO_INLINE")
 
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Matrix
 import android.support.annotation.ColorInt
+import com.mengwei.ktea.common.launchIO
+import com.mengwei.ktea.common.launchUI
+import okio.Okio
+import java.io.ByteArrayOutputStream
+import java.io.File
 
 /**
  * Create by MengWei at 2018/7/13
@@ -25,9 +29,9 @@ inline fun Bitmap.scale(width: Int, height: Int, filter: Boolean = true): Bitmap
 }
 
 inline fun createBitmap(
-    width: Int,
-    height: Int,
-    config: Bitmap.Config = Bitmap.Config.ARGB_8888
+        width: Int,
+        height: Int,
+        config: Bitmap.Config = Bitmap.Config.ARGB_8888
 ): Bitmap {
     return Bitmap.createBitmap(width, height, config)
 }
@@ -52,4 +56,27 @@ fun Bitmap.crop(x: Int, y: Int, width: Int, height: Int): Bitmap {
     val newBM = Bitmap.createBitmap(this, x, y, width, height, null, false)
     recycle()
     return newBM
+}
+
+fun Bitmap.save2File(file: File, backInfo: (info: String) -> Unit) {
+    launchIO {
+        try {
+            val os = ByteArrayOutputStream()
+            compress(Bitmap.CompressFormat.JPEG, 100, os)
+            Okio.buffer(Okio.sink(file)).write(os.toByteArray()).close()
+            launchUI {
+                backInfo("Success! Path: ${file.absolutePath}")
+            }
+        } catch (e: Exception) {
+            launchUI {
+                backInfo("Failed, ${e.message}")
+            }
+        }
+    }
+}
+
+fun Bitmap.toByteArray(): ByteArray {
+    val os = ByteArrayOutputStream()
+    compress(Bitmap.CompressFormat.JPEG, 100, os)
+    return os.toByteArray()
 }
