@@ -58,23 +58,6 @@ fun Bitmap.crop(x: Int, y: Int, width: Int, height: Int): Bitmap {
     return newBM
 }
 
-fun Bitmap.save2File(file: File, backInfo: (info: String) -> Unit) {
-    launchIO {
-        try {
-            val os = ByteArrayOutputStream()
-            compress(Bitmap.CompressFormat.JPEG, 100, os)
-            Okio.buffer(Okio.sink(file)).write(os.toByteArray()).close()
-            launchUI {
-                backInfo("Success! Path: ${file.absolutePath}")
-            }
-        } catch (e: Exception) {
-            launchUI {
-                backInfo("Failed, ${e.message}")
-            }
-        }
-    }
-}
-
 fun Bitmap.toByteArray(): ByteArray {
     val os = ByteArrayOutputStream()
     compress(Bitmap.CompressFormat.JPEG, 100, os)
