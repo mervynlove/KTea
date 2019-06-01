@@ -54,10 +54,15 @@ fun File.saveByteArray(bytes: ByteArray, backInfo: (status: BackStatus, info: St
     }
 }
 
-fun File.saveStream(inputStream: InputStream, backInfo: (status: BackStatus, info: String) -> Unit) {
+fun File.saveSource(inputStream: InputStream, backInfo: (status: BackStatus, info: String) -> Unit) {
     launchIO {
         try {
-            Okio.buffer(Okio.sink(this@saveStream)).write(inputStream.readBytes()).close()
+            val sink = Okio.buffer(Okio.sink(this@saveSource))
+            val source = Okio.buffer(Okio.source(inputStream))
+            sink.writeAll(source)
+            sink.flush()
+            sink.close()
+            source.close()
             launchUI {
                 backInfo(BackStatus.SUCCESS, "保存成功! 路径: $absolutePath")
             }
