@@ -3,6 +3,7 @@ package com.mengwei.ktea.base
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.View
+import com.mengwei.ktea.common.logger
 import com.mengwei.ktea.ktExtends.activity
 
 /**
@@ -19,6 +20,7 @@ abstract class BaseFragment : Fragment() {
     }
 
     final override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        logger("当前打开Fragment:${javaClass.simpleName}")
         initData()
     }
 

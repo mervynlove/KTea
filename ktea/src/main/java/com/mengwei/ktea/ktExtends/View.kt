@@ -25,10 +25,10 @@ infix fun View.singleClick(listener: (Any?) -> Unit) = RxView.clicks(this)
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe(listener)
 
-fun View.singleClick(milliSeconds: Long, listener: (Any?) -> Unit) = RxView.clicks(this)
-    .throttleFirst(milliSeconds, TimeUnit.MILLISECONDS)
-    .observeOn(AndroidSchedulers.mainThread())
-    .subscribe(listener)
+fun View.singleClick(milliSeconds: Long = 2, listener: (Any?) -> Unit) = RxView.clicks(this)
+        .throttleFirst(milliSeconds, TimeUnit.MILLISECONDS)
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(listener)
 
 /**
  * 当EditText在2秒内无变化时触发
@@ -38,10 +38,10 @@ infix fun EditText.changed(listener: (String) -> Unit) = RxTextView.afterTextCha
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe { listener(text.toString().trim()) }
 
-fun EditText.changed(milliSeconds: Long, listener: (String) -> Unit) = RxTextView.afterTextChangeEvents(this)
-    .debounce(milliSeconds, TimeUnit.MILLISECONDS)
-    .observeOn(AndroidSchedulers.mainThread())
-    .subscribe { listener(text.toString().trim()) }
+fun EditText.changed(milliSeconds: Long = 2, listener: (String) -> Unit) = RxTextView.afterTextChangeEvents(this)
+        .debounce(milliSeconds, TimeUnit.MILLISECONDS)
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe { listener(text.toString().trim()) }
 
 /**
  * 当EditText输入文字时键盘回车按下时触发, 每2秒可触发一次, 自动关闭键盘

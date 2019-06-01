@@ -12,7 +12,7 @@ fun String.AESEncrypt(key: String, offset: String) = AESCrypt.encrypt(this, key,
 
 fun String.AESDecrypt(key: String, offset: String) = AESCrypt.decrypt(this, key, offset)
 
-fun String.Base64Encode() = Base64.encodeBytes(toByteArray())
+fun String.Base64Encode() = Base64.encode(toByteArray())
 
 fun String.Base64Decode() = Base64.decode(this)
 
@@ -27,7 +27,7 @@ private object AESCrypt {
         val secretKeySpec = SecretKeySpec(key.toByteArray(), "AES")
         cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, IvParameterSpec(offset.toByteArray()))
         val result = cipher.doFinal(target.toByteArray())
-        return Base64.encodeBytes(result)
+        return Base64.encode(result)
     }
 
     fun decrypt(target: String, key: String, offset: String): String {

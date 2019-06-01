@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import com.mengwei.ktea.Settings
 import com.mengwei.ktea.common.createLoadingDialog
 import com.mengwei.ktea.common.delayUI
+import com.mengwei.ktea.common.logger
 import com.mengwei.ktea.http.TokenLose
 import com.mengwei.ktea.rxbus.RxBus
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -51,6 +52,7 @@ abstract class BaseActivity : AppCompatActivity() {
         disposables.add(
             loginObservable.subscribe { tokenLoseDoing() }
         )
+        logger("当前打开Activity:${javaClass.simpleName}")
     }
 
     // 显示加载框

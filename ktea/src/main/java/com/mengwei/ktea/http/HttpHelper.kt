@@ -97,9 +97,7 @@ inline fun <reified T> httpEntityList(config: NetWrapper<List<T>>.() -> Unit): J
 /**
  * 这里的泛型是BaseInfo中的info解析后的object
  */
-inline fun <reified T> httpBase(config: NetWrapper<T>.() -> Unit) = httpBase(Settings.jsonObjectStyle(), config)
-
-inline fun <reified T> httpBase(style: JsonStyle?, config: NetWrapper<T>.() -> Unit): Job {
+inline fun <reified T> httpBase(style: JsonStyle? = Settings.jsonObjectStyle(), config: NetWrapper<T>.() -> Unit): Job {
     if (style == null) throw IllegalArgumentException("http请求解析成指定的实体类必须指定JsonStyle!!!")
     val wrapper = NetWrapper<T>()
     wrapper.config()
