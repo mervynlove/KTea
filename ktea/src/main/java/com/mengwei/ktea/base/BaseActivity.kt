@@ -52,7 +52,7 @@ abstract class BaseActivity : AppCompatActivity() {
         disposables.add(
             loginObservable.subscribe { tokenLoseDoing() }
         )
-        logger("当前打开Activity:${javaClass.simpleName}")
+        logger("当前打开Activity:${javaClass.name}")
     }
 
     // 显示加载框
