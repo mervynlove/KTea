@@ -19,9 +19,7 @@ import java.util.concurrent.TimeUnit
  */
 abstract class BaseActivity : AppCompatActivity() {
 
-    protected val jobs by lazy { mutableListOf<Job>() }
     protected val disposables by lazy { CompositeDisposable() }
-    open protected var loadingMilliSeconds = 0L
 
     @Volatile
     private var showLoadingTimes = 0
@@ -42,11 +40,9 @@ abstract class BaseActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         Settings.activityStack().add(this)
         val handler = Handler()
-        with(window.decorView) {
-            post {
-                handler.post {
-                    initData()
-                }
+        window.decorView.post {
+            handler.post {
+                initData()
             }
         }
         disposables.add(
@@ -69,9 +65,7 @@ abstract class BaseActivity : AppCompatActivity() {
             --showLoadingTimes
         }
         if (showLoadingTimes == 0) {
-            if (loadingProgress.isShowing) delayUI(loadingMilliSeconds) {
-                if (loadingProgress.isShowing) loadingProgress.dismiss()
-            }
+            if (loadingProgress.isShowing) loadingProgress.dismiss()
         }
     }
 
