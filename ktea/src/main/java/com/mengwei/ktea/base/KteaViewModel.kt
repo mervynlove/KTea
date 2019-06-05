@@ -6,7 +6,7 @@ import kotlinx.coroutines.Job
 /**
  * Create by MengWei at 2018/8/17
  */
-open class BaseViewModel : ViewModel() {
+open class KteaViewModel : ViewModel() {
     protected val jobs by lazy { mutableListOf<Job>() }
 
     override fun onCleared() {

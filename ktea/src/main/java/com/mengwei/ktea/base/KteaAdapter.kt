@@ -9,7 +9,7 @@ import android.view.ViewGroup
 /**
  * Create by MengWei at 2018/8/28
  */
-abstract class LiteAdapter<T>(@LayoutRes private val layoutRes: Int) : RecyclerView.Adapter<LiteAdapter.VH>() {
+abstract class KteaAdapter<T>(@LayoutRes private val layoutRes: Int) : RecyclerView.Adapter<KteaAdapter.VH>() {
 
     class VH(itemView: View) : RecyclerView.ViewHolder(itemView)
 
