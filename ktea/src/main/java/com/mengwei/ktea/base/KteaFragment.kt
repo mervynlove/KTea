@@ -9,14 +9,14 @@ import com.mengwei.ktea.ktExtends.activity
 /**
  * Create by MengWei at 2018/9/3
  */
-abstract class BaseFragment : Fragment() {
+abstract class KteaFragment : Fragment() {
 
     fun showLoading() {
-        activity<BaseActivity> { showLoading() }
+        activity<KteaActivity> { showLoading() }
     }
 
     fun dismissLoading() {
-        activity<BaseActivity> { dismissLoading() }
+        activity<KteaActivity> { dismissLoading() }
     }
 
     final override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

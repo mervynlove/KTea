@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit
 /**
  * Create by MengWei at 2018/7/31
  */
-abstract class BaseActivity : AppCompatActivity() {
+abstract class KteaActivity : AppCompatActivity() {
 
     protected val disposables by lazy { CompositeDisposable() }
 
