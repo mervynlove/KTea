@@ -13,8 +13,7 @@ import kotlinx.coroutines.Job
  * 3. entity只能使用java类, 因为自动生成的kotlin没有空构造方法, fastjson无法解析
  * 4. 上传文件参数必须为File类型或者string类型
  */
-
-fun http(config: NetWrapper<String>.() -> Unit): Job {
+fun httpUI(config: NetWrapper<String>.() -> Unit): Job {
     val wrapper = NetWrapper<String>()
     wrapper.config()
     with(wrapper) {
@@ -40,8 +39,31 @@ fun http(config: NetWrapper<String>.() -> Unit): Job {
     }
 }
 
+fun http(config: NetWrapper<String>.() -> Unit): Job {
+    val wrapper = NetWrapper<String>()
+    wrapper.config()
+    with(wrapper) {
+        return launchIO {
+            var result: String? = null
+            var error: String? = null
+            try {
+                val response = HTTP.execute(method, url, params)
+                if (response.isSuccessful) {
+                    result = response.body()!!.string().trim()
+                } else {
+                    error = "code:${response.code()} ; 连接错误:${response.errorBody()!!.string()}"
+                }
+            } catch (e: Exception) {
+                error = "错误:${e.message}"
+            }
+            result?.let { onSuccess(it) }
+            error?.let { onError(it) }
+        }
+    }
+}
+
 //这里的泛型是返回数据解析后的Entity
-inline fun <reified T> httpEntity(config: NetWrapper<T>.() -> Unit): Job {
+inline fun <reified T> httpEntityUI(config: NetWrapper<T>.() -> Unit): Job {
     val wrapper = NetWrapper<T>()
     wrapper.config()
     with(wrapper) {
@@ -67,8 +89,32 @@ inline fun <reified T> httpEntity(config: NetWrapper<T>.() -> Unit): Job {
     }
 }
 
+inline fun <reified T> httpEntity(config: NetWrapper<T>.() -> Unit): Job {
+    val wrapper = NetWrapper<T>()
+    wrapper.config()
+    with(wrapper) {
+        return launchIO {
+            var result: T? = null
+            var error: String? = null
+            try {
+                val response = HTTP.execute(method, url, params)
+                if (response.isSuccessful) {
+                    val bodyString = response.body()!!.string().trim()
+                    result = bodyString.toEntity<T>()
+                } else {
+                    error = "code:${response.code()} ; 连接错误:${response.errorBody()!!.string()}"
+                }
+            } catch (e: Exception) {
+                error = "错误:${e.message}"
+            }
+            result?.let { onSuccess(it) }
+            error?.let { onError(it) }
+        }
+    }
+}
+
 //这里的泛型是返回数据解析后的EntityList
-inline fun <reified T> httpEntityList(config: NetWrapper<List<T>>.() -> Unit): Job {
+inline fun <reified T> httpEntityListUI(config: NetWrapper<List<T>>.() -> Unit): Job {
     val wrapper = NetWrapper<List<T>>()
     wrapper.config()
     with(wrapper) {
@@ -94,10 +140,34 @@ inline fun <reified T> httpEntityList(config: NetWrapper<List<T>>.() -> Unit): J
     }
 }
 
+inline fun <reified T> httpEntityList(config: NetWrapper<List<T>>.() -> Unit): Job {
+    val wrapper = NetWrapper<List<T>>()
+    wrapper.config()
+    with(wrapper) {
+        return launchIO {
+            var result: List<T>? = null
+            var error: String? = null
+            try {
+                val response = HTTP.execute(method, url, params)
+                if (response.isSuccessful) {
+                    val bodyString = response.body()!!.string().trim()
+                    result = bodyString.toEntityList<T>()
+                } else {
+                    error = "code:${response.code()} ; 连接错误:${response.errorBody()!!.string()}"
+                }
+            } catch (e: Exception) {
+                error = "错误:${e.message}"
+            }
+            result?.let { onSuccess(it) }
+            error?.let { onError(it) }
+        }
+    }
+}
+
 /**
  * 这里的泛型是BaseInfo中的info解析后的object
  */
-inline fun <reified T> httpBase(style: JsonStyle? = Settings.jsonObjectStyle(), config: NetWrapper<T>.() -> Unit): Job {
+inline fun <reified T> httpBaseUI(style: JsonStyle? = Settings.jsonObjectStyle(), config: NetWrapper<T>.() -> Unit): Job {
     if (style == null) throw IllegalArgumentException("http请求解析成指定的实体类必须指定JsonStyle!!!")
     val wrapper = NetWrapper<T>()
     wrapper.config()
@@ -134,31 +204,13 @@ inline fun <reified T> httpBase(style: JsonStyle? = Settings.jsonObjectStyle(), 
     }
 }
 
-/**
- * 这里的泛型是BaseInfo中的info解析后生成的List<T> : 主要为了防止json数组和json对象解析成实体类/实体类数组时服务器端定义的key不一致.
- * 1. 如果设置了arrayStyle, 按照arrayStyle进行解析
- * 2. 没有设置arrayStyle, 默认按照objectStyle进行解析
- * 3. 如果两个style都没设置, 则报出异常, 根据异常可以去配置style了
- */
-inline fun <reified T> httpBaseList(config: NetWrapper<List<T>>.() -> Unit): Job {
-    return if (Settings.jsonArrayStyle() == null) {
-        if (Settings.jsonObjectStyle() == null) {
-            throw IllegalArgumentException("http请求解析成指定的实体类必须指定JsonStyle!!!")
-        } else {
-            httpBaseList(Settings.jsonObjectStyle(), config)
-        }
-    } else {
-        httpBaseList(Settings.jsonArrayStyle(), config)
-    }
-}
-
-inline fun <reified T> httpBaseList(style: JsonStyle?, config: NetWrapper<List<T>>.() -> Unit): Job {
+inline fun <reified T> httpBase(style: JsonStyle? = Settings.jsonObjectStyle(), config: NetWrapper<T>.() -> Unit): Job {
     if (style == null) throw IllegalArgumentException("http请求解析成指定的实体类必须指定JsonStyle!!!")
-    val wrapper = NetWrapper<List<T>>()
+    val wrapper = NetWrapper<T>()
     wrapper.config()
     with(wrapper) {
         return launchIO {
-            var result: List<T>? = null
+            var result: T? = null
             var error: String? = null
             try {
                 val response = HTTP.execute(method, url, params)
@@ -170,9 +222,51 @@ inline fun <reified T> httpBaseList(style: JsonStyle?, config: NetWrapper<List<T
                     }
                     if (status == style.successStatusValue) {
                         val dataString = json.getString(style.dataName).trim()
-                        result = if (dataString.isNotEmpty()) dataString.toEntityList<T>() else null
+                        result = if (dataString.isNotEmpty()) dataString.toEntity<T>() else null
                     } else {
                         error = json.getString(style.messageName)
+                    }
+
+                } else {
+                    error = "code:${response.code()} ; 连接错误:${response.errorBody()!!.string()}"
+                }
+            } catch (e: Exception) {
+                error = "错误:${e.message}"
+            }
+            result?.let { onSuccess(it) }
+            error?.let { onError(it) }
+        }
+    }
+}
+
+/**
+ * 这里的泛型是BaseInfo中的info解析后生成的List<T> : 主要为了防止json数组和json对象解析成实体类/实体类数组时服务器端定义的key不一致.
+ * 1. 如果设置了arrayStyle, 按照arrayStyle进行解析
+ * 2. 没有设置arrayStyle, 默认按照objectStyle进行解析
+ * 3. 如果两个style都没设置, 则报出异常, 根据异常可以去配置style了
+ */
+inline fun <reified T> httpBaseListUI(style: JsonStyle? = Settings.jsonArrayStyle(), config: NetWrapper<List<T>>.() -> Unit): Job {
+    val currentStyle = style
+            ?: (Settings.jsonObjectStyle() ?: throw IllegalArgumentException("http请求解析成指定的实体类必须指定JsonStyle!!!"))
+    val wrapper = NetWrapper<List<T>>()
+    wrapper.config()
+    with(wrapper) {
+        return launchIO {
+            var result: List<T>? = null
+            var error: String? = null
+            try {
+                val response = HTTP.execute(method, url, params)
+                if (response.isSuccessful) {
+                    val json = response.body()!!.string().trim().toJsonObject()
+                    val status = json.getString(currentStyle.statusName)
+                    if (currentStyle.tokenLoseStatusValue != null) {
+                        if (status == currentStyle.tokenLoseStatusValue) RxBus.BUS.post(TokenLose())
+                    }
+                    if (status == currentStyle.successStatusValue) {
+                        val dataString = json.getString(currentStyle.dataName).trim()
+                        result = if (dataString.isNotEmpty()) dataString.toEntityList<T>() else null
+                    } else {
+                        error = json.getString(currentStyle.messageName)
                     }
 
                 } else {
@@ -185,6 +279,42 @@ inline fun <reified T> httpBaseList(style: JsonStyle?, config: NetWrapper<List<T
                 result?.let { onSuccess(it) }
                 error?.let { onError(it) }
             }.join()
+        }
+    }
+}
+
+inline fun <reified T> httpBaseList(style: JsonStyle? = Settings.jsonArrayStyle(), config: NetWrapper<List<T>>.() -> Unit): Job {
+    val currentStyle = style
+            ?: (Settings.jsonObjectStyle() ?: throw IllegalArgumentException("http请求解析成指定的实体类必须指定JsonStyle!!!"))
+    val wrapper = NetWrapper<List<T>>()
+    wrapper.config()
+    with(wrapper) {
+        return launchIO {
+            var result: List<T>? = null
+            var error: String? = null
+            try {
+                val response = HTTP.execute(method, url, params)
+                if (response.isSuccessful) {
+                    val json = response.body()!!.string().trim().toJsonObject()
+                    val status = json.getString(currentStyle.statusName)
+                    if (currentStyle.tokenLoseStatusValue != null) {
+                        if (status == currentStyle.tokenLoseStatusValue) RxBus.BUS.post(TokenLose())
+                    }
+                    if (status == currentStyle.successStatusValue) {
+                        val dataString = json.getString(currentStyle.dataName).trim()
+                        result = if (dataString.isNotEmpty()) dataString.toEntityList<T>() else null
+                    } else {
+                        error = json.getString(currentStyle.messageName)
+                    }
+
+                } else {
+                    error = "code:${response.code()} ; 连接错误:${response.errorBody()!!.string()}"
+                }
+            } catch (e: Exception) {
+                error = "错误:${e.message}"
+            }
+            result?.let { onSuccess(it) }
+            error?.let { onError(it) }
         }
     }
 }
