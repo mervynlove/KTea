@@ -38,7 +38,7 @@ infix fun EditText.changed(listener: (String) -> Unit) = RxTextView.afterTextCha
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe { listener(text.toString().trim()) }
 
-fun EditText.changed(milliSeconds: Long = 2, listener: (String) -> Unit) = RxTextView.afterTextChangeEvents(this)
+fun EditText.changed(milliSeconds: Long = 2000, listener: (String) -> Unit) = RxTextView.afterTextChangeEvents(this)
         .debounce(milliSeconds, TimeUnit.MILLISECONDS)
         .observeOn(AndroidSchedulers.mainThread())
         .subscribe { listener(text.toString().trim()) }
