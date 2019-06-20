@@ -15,10 +15,15 @@ abstract class KteaAdapter<T>(@LayoutRes private val layoutRes: Int) : RecyclerV
 
     val datas by lazy { mutableListOf<T>() }
 
+    fun removeItem(position: Int) {
+        datas.removeAt(position)
+        notifyItemRemoved(position)
+        notifyItemRangeChanged(position, datas.size)
+    }
+
     fun update(list: List<T>) {
         if (datas.isNotEmpty()) datas.clear()
         datas.addAll(list)
-        doExtra()
         notifyDataSetChanged()
     }
 
@@ -29,14 +34,8 @@ abstract class KteaAdapter<T>(@LayoutRes private val layoutRes: Int) : RecyclerV
 
     fun addAll(list: List<T>) {
         datas.addAll(list)
-        doExtra()
         notifyDataSetChanged()
     }
-
-    /**
-     * 每次更新数据时执行额外的代码
-     */
-    open fun doExtra() = Unit
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
         return VH(LayoutInflater.from(parent.context).inflate(layoutRes, parent, false))
