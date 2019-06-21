@@ -10,8 +10,8 @@ import android.arch.lifecycle.Observer
 
 fun <T : Any> LiveData<T>.observe(owner: LifecycleOwner, observer: (T) -> Unit) {
     observe(owner, Observer {
-        if (it != null) {
-            observer(it)
+        it?.run {
+            observer(this)
         }
     })
 }

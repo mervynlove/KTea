@@ -12,6 +12,7 @@ open class KteaViewModel : ViewModel() {
     val errorLiveData by lazy { MutableLiveData<String>() }
     val successLiveData by lazy { MutableLiveData<String>() }
 
+    fun <T> getLiveData() = KteaLiveData<T>()
 
 
     override fun onCleared() {
