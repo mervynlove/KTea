@@ -49,10 +49,12 @@ fun View.disable() {
  */
 infix fun View.singleClick(listener: (Any?) -> Unit) = RxView.clicks(this)
         .throttleFirst(2, TimeUnit.SECONDS)
+        .observeOn(AndroidSchedulers.mainThread())
         .subscribe(listener)
 
 fun View.singleClick(milliSeconds: Long = 2000, listener: (Any?) -> Unit) = RxView.clicks(this)
         .throttleFirst(milliSeconds, TimeUnit.MILLISECONDS)
+        .observeOn(AndroidSchedulers.mainThread())
         .subscribe(listener)
 
 /**
@@ -60,10 +62,12 @@ fun View.singleClick(milliSeconds: Long = 2000, listener: (Any?) -> Unit) = RxVi
  */
 infix fun TextView.changed(listener: (String) -> Unit) = RxTextView.afterTextChangeEvents(this)
         .debounce(2, TimeUnit.SECONDS)
+        .observeOn(AndroidSchedulers.mainThread())
         .subscribe { listener(text.toString().trim()) }
 
 fun TextView.changed(milliSeconds: Long = 2000, listener: (String) -> Unit) = RxTextView.afterTextChangeEvents(this)
         .debounce(milliSeconds, TimeUnit.MILLISECONDS)
+        .observeOn(AndroidSchedulers.mainThread())
         .subscribe { listener(text.toString().trim()) }
 
 /**
@@ -71,6 +75,7 @@ fun TextView.changed(milliSeconds: Long = 2000, listener: (String) -> Unit) = Rx
  */
 infix fun EditText.done(listener: (String) -> Unit) = RxTextView.editorActions(this)
         .throttleFirst(2, TimeUnit.SECONDS)
+        .observeOn(AndroidSchedulers.mainThread())
         .subscribe {
             listener(text.toString().trim())
             val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -79,6 +84,7 @@ infix fun EditText.done(listener: (String) -> Unit) = RxTextView.editorActions(t
 
 fun EditText.done(milliSeconds: Long = 2000, listener: (String) -> Unit) = RxTextView.editorActions(this)
         .throttleFirst(milliSeconds, TimeUnit.MILLISECONDS)
+        .observeOn(AndroidSchedulers.mainThread())
         .subscribe {
             listener(text.toString().trim())
             val inputMethodManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -87,8 +93,10 @@ fun EditText.done(milliSeconds: Long = 2000, listener: (String) -> Unit) = RxTex
 
 fun SeekBar.changes(milliSeconds: Long = 200, listener: (progress: Int) -> Unit) = RxSeekBar.changes(this)
         .debounce(milliSeconds, TimeUnit.MILLISECONDS)
+        .observeOn(AndroidSchedulers.mainThread())
         .subscribe(listener)
 
 fun TabLayout.selectChange(milliSeconds: Long = 2000, listener: (TabLayout.Tab) -> Unit) = RxTabLayout.selections(this)
         .throttleFirst(milliSeconds, TimeUnit.MILLISECONDS)
+        .observeOn(AndroidSchedulers.mainThread())
         .subscribe(listener)
