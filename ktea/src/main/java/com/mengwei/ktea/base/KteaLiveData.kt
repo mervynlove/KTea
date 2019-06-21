@@ -19,7 +19,7 @@ class KteaLiveData<T> : LiveData<T>() {
 
     fun observe(owner: LifecycleOwner, observer: (T) -> Unit) {
         super.observe(owner, Observer {
-            it?.let(observer)
+            it?.run { observer(it) }
         })
     }
 
