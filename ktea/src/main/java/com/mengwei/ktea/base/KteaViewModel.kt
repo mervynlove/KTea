@@ -20,7 +20,7 @@ open class KteaViewModel : ViewModel() {
         super.onCleared()
     }
 
-    open protected fun close() {
+    protected open fun close() {
         jobs.forEach { it.cancel() }
     }
 }
