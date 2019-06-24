@@ -9,7 +9,7 @@ import android.support.annotation.IdRes
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 
-inline fun <reified T> Context.createIntent() = Intent(this, T::class.java)
+inline fun <reified T : Activity> Context.createIntent() = Intent(this, T::class.java)
 
 inline fun <reified T : Activity> Context.startActivity() = startActivity(Intent(this, T::class.java))
 
@@ -18,6 +18,8 @@ inline fun <reified T : ViewModel> FragmentActivity.getViewModel() = ViewModelPr
 inline fun <reified T : ViewModel> Fragment.getViewModel() = ViewModelProviders.of(this).get(T::class.java)
 
 inline fun <reified T : Activity> Fragment.startActivity() = activity?.run { startActivity(Intent(this, T::class.java)) }
+
+inline fun <reified T : Activity> Fragment.createIntent() = activity?.run { Intent(this, T::class.java) }
 
 
 // 显示一个fragment
