@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#D81B60</color>
+
+    <!--app中主要色值: 相同类型多个色值序号, 越小颜色越浅, 越大颜色越深-->
+    <color name="primary">#0D3D6E</color>
+    <color name="text_gray1">#999999</color>
+    <color name="text_gray2">#666666</color>
+    <color name="text_gray3">#333333</color>
+    <color name="text_gray4">#2F2F2F</color>
+    <color name="border_gray1">#eeeeee</color>
+    <color name="bg_gray1">#f9f9f9</color>
+    <color name="bg_gray2">#F3F3F3</color>
+    <color name="bg_gray3">#F1F1F1</color>
+    <color name="bg_blue1">#84ABF8</color>
+    <color name="bg_blue2">#477EE7</color>
+    <color name="bg_blue3">#1760EB</color>
+    <color name="line_gray1">#EEEEEE</color>
+    <color name="line_gray2">#DADADA</color>
+
+
+    <color name="loading_view">@color/colorAccent</color>
+    <color name="refresh_color">@color/colorAccent</color>
+    <color name="bg_title">@color/primary</color>
+    <color name="price_up">#26BF66</color>
+    <color name="price_down">#DE5633</color>
+
+
 </resources>

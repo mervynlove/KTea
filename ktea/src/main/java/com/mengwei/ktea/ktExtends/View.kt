@@ -43,6 +43,8 @@ fun View.disable() {
     isEnabled = false
 }
 
+fun EditText.string() = text.toString().trim()
+
 
 /**
  * 2秒内的单击事件只发生一次

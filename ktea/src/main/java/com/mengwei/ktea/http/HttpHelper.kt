@@ -240,6 +240,79 @@ inline fun <reified T> httpBase(style: JsonStyle? = Settings.jsonObjectStyle(), 
 }
 
 /**
+ * 这里的泛型是BaseInfo中的info解析后的String
+ */
+fun httpBaseStringUI(style: JsonStyle? = Settings.jsonObjectStyle(), config: NetWrapper<String>.() -> Unit): Job {
+    if (style == null) throw IllegalArgumentException("http请求解析成指定的实体类必须指定JsonStyle!!!")
+    val wrapper = NetWrapper<String>()
+    wrapper.config()
+    with(wrapper) {
+        return launchIO {
+            var result: String? = null
+            var error: String? = null
+            try {
+                val response = HTTP.execute(method, url, params)
+                if (response.isSuccessful) {
+                    val json = response.body()!!.string().trim().toJsonObject()
+                    val status = json.getString(style.statusName)
+                    if (style.tokenLoseStatusValue != null) {
+                        if (status == style.tokenLoseStatusValue) RxBus.BUS.post(TokenLose())
+                    }
+                    if (status == style.successStatusValue) {
+                        result = json.getString(style.dataName).trim()
+                    } else {
+                        error = json.getString(style.messageName)
+                    }
+
+                } else {
+                    error = "code:${response.code()} ; 连接错误:${response.errorBody()!!.string()}"
+                }
+            } catch (e: Exception) {
+                error = "错误:${e.message}"
+            }
+            launchUI {
+                result?.let { onSuccess(it) }
+                error?.let { onError(it) }
+            }.join()
+        }
+    }
+}
+
+fun httpBaseString(style: JsonStyle? = Settings.jsonObjectStyle(), config: NetWrapper<String>.() -> Unit): Job {
+    if (style == null) throw IllegalArgumentException("http请求解析成指定的实体类必须指定JsonStyle!!!")
+    val wrapper = NetWrapper<String>()
+    wrapper.config()
+    with(wrapper) {
+        return launchIO {
+            var result: String? = null
+            var error: String? = null
+            try {
+                val response = HTTP.execute(method, url, params)
+                if (response.isSuccessful) {
+                    val json = response.body()!!.string().trim().toJsonObject()
+                    val status = json.getString(style.statusName)
+                    if (style.tokenLoseStatusValue != null) {
+                        if (status == style.tokenLoseStatusValue) RxBus.BUS.post(TokenLose())
+                    }
+                    if (status == style.successStatusValue) {
+                        result = json.getString(style.dataName).trim()
+                    } else {
+                        error = json.getString(style.messageName)
+                    }
+
+                } else {
+                    error = "code:${response.code()} ; 连接错误:${response.errorBody()!!.string()}"
+                }
+            } catch (e: Exception) {
+                error = "错误:${e.message}"
+            }
+            result?.let { onSuccess(it) }
+            error?.let { onError(it) }
+        }
+    }
+}
+
+/**
  * 这里的泛型是BaseInfo中的info解析后生成的List<T> : 主要为了防止json数组和json对象解析成实体类/实体类数组时服务器端定义的key不一致.
  * 1. 如果设置了arrayStyle, 按照arrayStyle进行解析
  * 2. 没有设置arrayStyle, 默认按照objectStyle进行解析
