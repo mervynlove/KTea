@@ -20,17 +20,6 @@ object NetClient {
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
                 .cache(Cache(File(Settings.appCtx().cacheDir, "HttpResponseCache"), 50 * 1024 * 1024))
-                .cookieJar(object : CookieJar {
-                    var cookieStore = ArrayMap<HttpUrl, List<Cookie>?>()
-                    override fun saveFromResponse(url: HttpUrl, cookies: List<Cookie>?) {
-                        cookieStore[url] = cookies
-                    }
-
-                    override fun loadForRequest(url: HttpUrl?): List<Cookie> {
-                        return cookieStore[url] ?: mutableListOf()
-                    }
-
-                })
                 .addInterceptor(HttpHeadInterceptor())
                 .addInterceptor(if (Settings.isDEBUG()) HttpLoggingInterceptor() else NoneInterceptor())
                 .build()

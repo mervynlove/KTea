@@ -27,7 +27,7 @@ object HTTP {
     fun execute(method: Method, url: String, params: MutableMap<String, Any?>?): Response<ResponseBody> {
         if (params == null) throw java.lang.IllegalArgumentException("请求参数params不能为null!!!")
         val api = NetClient.getClient().create(API::class.java)
-        return when (method) {
+        val response = when (method) {
             Method.GET -> api.getCall(url, params)
             Method.POST -> api.postCall(url, params)
             //上传文件参数必须为File类型或者string类型
@@ -50,5 +50,7 @@ object HTTP {
                 api.fileCall(url, map)
             }
         }.execute()
+        HttpHead.params["Cookie"] = response.headers()["Set-Cookie"]
+        return response
     }
 }
