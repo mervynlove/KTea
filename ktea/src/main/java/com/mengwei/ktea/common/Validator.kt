@@ -19,6 +19,12 @@ fun String.isNotIncludeUpperCase() = matches(Regex("[a-z0-9]+"))
 //不含有数字
 fun String.isNotIncludeOneNumber() = !matches(Regex(".*\\d.*"))
 
+//含有数字
+fun String.isIncludeOneNumber() = matches(Regex(".*\\d.*"))
+
+//同时含有数字和字母
+fun String.isIncludeNumberAndLetter()= matches(Regex(".*\\d.*[A-Za-z].*|.*[A-Za-z].*\\d.*"))
+
 //以数字开头
 fun String.isStartsWithNumber() = Character.isDigit(this[0])
 
