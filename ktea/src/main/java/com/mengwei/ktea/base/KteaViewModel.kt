@@ -10,8 +10,8 @@ import kotlinx.coroutines.Job
  */
 open class KteaViewModel : ViewModel() {
     protected val jobs by lazy { mutableListOf<Job>() }
-    val errorLiveData by lazy { MutableLiveData<String>() }
-    val successLiveData by lazy { MutableLiveData<String>() }
+    val errorLiveData by lazy { KteaLiveData<String>() }
+    val successLiveData by lazy { KteaLiveData<String>() }
 
     protected fun <T> getLiveData() = KteaLiveData<T>()
 

@@ -27,7 +27,7 @@ fun createLoadingViewInFrameLayout(ctx: Context) = SpinKitView(ctx).apply {
 /**
  * 创建loading加载对话框
  */
-fun createLoadingDialog(ctx: Context, cancelListener: () -> Unit): Dialog {
+fun createLoadingDialog(ctx: Context, cancelable: Boolean = true, cancelListener: () -> Unit): Dialog {
     return Dialog(ctx, R.style.LightProgressDialog).apply {
         val spinKitView = SpinKitView(ctx).apply {
             setIndeterminateDrawable(Circle().apply {
@@ -35,8 +35,7 @@ fun createLoadingDialog(ctx: Context, cancelListener: () -> Unit): Dialog {
             })
         }
         setContentView(spinKitView)
-//        setContentView(R.layout.loading_dialog)
-        setCancelable(true)
+        setCancelable(cancelable)
         setCanceledOnTouchOutside(false)
         val lp = window.attributes
         lp.gravity = Gravity.CENTER

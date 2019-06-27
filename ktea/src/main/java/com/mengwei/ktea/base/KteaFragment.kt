@@ -7,13 +7,11 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentActivity
 import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import com.mengwei.ktea.common.logger
-import com.mengwei.ktea.ktExtends.activity
-import com.mengwei.ktea.ktExtends.dp2px
-import com.mengwei.ktea.ktExtends.px2dp
 import com.mengwei.ktea.views.FancyToast
 
 /**
@@ -23,13 +21,24 @@ abstract class KteaFragment : Fragment() {
 
     protected inline fun <reified T : ViewModel> getViewModel() = ViewModelProviders.of(this).get(T::class.java)
 
+    protected inline fun <reified T : ViewModel> getActivityViewModel() = ViewModelProviders.of(kteaActivity).get(T::class.java)
+
     protected inline fun <reified T : Activity> startActivity() = activity?.run { startActivity(Intent(this, T::class.java)) }
 
-    protected inline fun <reified T : Activity> createIntent() = activity?.run { Intent(this, T::class.java) }
+    protected inline fun <reified T : Activity> newIntent() = activity?.run { Intent(this, T::class.java) }
 
-    protected fun dp2px(dps: Int) = activity?.dp2px(dps) ?: 0
+    protected val kteaActivity: KteaActivity by lazy {
+        val thisActivity = activity
+        if (thisActivity is KteaActivity) thisActivity
+        else throw IllegalStateException("${javaClass.simpleName}的activity不是KteaActivity")
+    }
 
-    protected fun px2dp(pxs: Int) = activity?.px2dp(pxs) ?: 0
+    protected inline fun <reified T : FragmentActivity> kteaActivity(runnable: T.() -> Unit) {
+        val thisActivity = activity
+        if (thisActivity is T) {
+            thisActivity.runnable()
+        } else throw IllegalStateException("${javaClass.simpleName}的activity不是${T::class.java.simpleName}")
+    }
 
     protected fun infoToast(text: String, duration: Int = Toast.LENGTH_SHORT) {
         activity?.run {
@@ -77,11 +86,11 @@ abstract class KteaFragment : Fragment() {
 
 
     protected fun showLoading() {
-        activity<KteaActivity> { showLoading() }
+        kteaActivity.showLoading()
     }
 
     protected fun dismissLoading() {
-        activity<KteaActivity> { dismissLoading() }
+        kteaActivity.dismissLoading()
     }
 
     final override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

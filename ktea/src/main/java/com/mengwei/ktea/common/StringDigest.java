@@ -7,7 +7,7 @@ import java.security.NoSuchAlgorithmException;
  * Create by MengWei at 2019/6/1
  */
 public class StringDigest {
-    static final char[] HEX_DIGITS =
+    private static final char[] HEX_DIGITS =
             {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
     private final byte[] data;
 

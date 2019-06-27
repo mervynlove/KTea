@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit
  * Create by MengWei at 2018/9/30
  */
 
-infix fun View.onclick(listener: () -> Unit) {
+infix fun View.click(listener: () -> Unit) {
     setOnClickListener { listener() }
 }
 
@@ -43,7 +43,7 @@ fun View.disable() {
     isEnabled = false
 }
 
-fun EditText.string() = text.toString().trim()
+fun TextView.string() = text.toString().trim()
 
 
 /**

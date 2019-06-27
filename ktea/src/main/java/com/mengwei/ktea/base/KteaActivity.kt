@@ -27,11 +27,14 @@ abstract class KteaActivity : AppCompatActivity() {
 
     protected val disposables by lazy { CompositeDisposable() }
 
+    // 控制loading对话框是否可以取消, 继承类重写赋值即可.
+    protected open var loadingCancelable = true
+
     @Volatile
     private var showLoadingTimes = 0
 
     private val loadingProgress by lazy {
-        createLoadingDialog(this) { showLoadingTimes = 0 }
+        createLoadingDialog(this, loadingCancelable) { showLoadingTimes = 0 }
     }
 
     companion object {
@@ -42,15 +45,11 @@ abstract class KteaActivity : AppCompatActivity() {
         }
     }
 
-    inline fun <reified T : Activity> createIntent() = Intent(this, T::class.java)
+    inline fun <reified T : Activity> newIntent() = Intent(this, T::class.java)
 
     inline fun <reified T : Activity> startActivity() = startActivity(Intent(this, T::class.java))
 
     inline fun <reified T : ViewModel> getViewModel() = ViewModelProviders.of(this).get(T::class.java)
-
-    fun dp2px(dps: Int) = Math.round(resources.displayMetrics.density * dps)
-
-    fun px2dp(pxs: Int) = Math.round(pxs / resources.displayMetrics.density)
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

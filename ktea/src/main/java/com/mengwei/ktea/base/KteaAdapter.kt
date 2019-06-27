@@ -15,6 +15,11 @@ abstract class KteaAdapter<T>(@LayoutRes private val layoutRes: Int) : RecyclerV
 
     val datas by lazy { mutableListOf<T>() }
 
+    fun clear() {
+        datas.clear()
+        notifyDataSetChanged()
+    }
+
     fun removeItem(position: Int) {
         datas.removeAt(position)
         notifyItemRemoved(position)
