@@ -69,13 +69,3 @@ task sourcesJar(type: Jar) {
 artifacts {
     archives sourcesJar
 }
-
-publish {
-    userOrg = 'mervynlove'
-    groupId = 'com.mengwei'
-    artifactId = 'ktea'
-    publishVersion = '1.2.1'
-    desc = '简易, 灵活的高性能Kotlin Android开发框架'
-    website = 'https://github.com/mervynlove/KTea'
-
-}
